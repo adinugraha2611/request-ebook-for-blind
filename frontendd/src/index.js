@@ -5,7 +5,6 @@ import { RequestedListProvider } from './contexts/RequestedListContext';
 import { SearchResultProvider } from './contexts/SearchResultContext';
 import { withRouter, BrowserRouter } from 'react-router-dom';
 import { UserProvider } from './contexts/UserContext';
-import { LiveAnnouncer } from 'react-aria-live';
 import { ToastProvider } from './contexts/ToastContext';
 
 ReactDOM.render(
