@@ -1,7 +1,6 @@
 /**
  * set firebase admin db and auth
  * don't forget to set env var when on production stage or auth related actions:
- * $env:GOOGLE_APPLICATION_CREDENTIALS="D:\documents\javascript\code testing\my projects\mitranetra-cloud-functions-clean\functions\mitranetra-1234-firebase-adminsdk-izyqz-dc403073b1.json"
  */
 const admin = require('firebase-admin');
 const firebase = require('../firebaseConfig');
@@ -73,7 +72,8 @@ const manageDb = {
         .doc(req.body.book.id)
         .set(req.body.book);
 
-      addUserReqList(req.body.uid, req.body.book.id);
+      // add new book to user's database.
+      await addUserReqList(req.body.uid, req.body.book.id);
       res.locals.addBookStatus = `book added: ${req.body.book.id}`;
       return next();
     } catch (err) {
@@ -93,11 +93,13 @@ const manageDb = {
         .update({
           voteSum: admin.firestore.FieldValue.increment(1),
         });
-      addUserReqList(req.body.uid, req.body.book.id);
-      res.status(200).json('success');
+
+      // add new book to user's database
+      await addUserReqList(req.body.uid, req.body.book.id);
+      res.status(200).json({ status: 'success' });
     } catch (err) {
-      console.log(err);
-      res.status(400).json('failed');
+      console.log('adding vote error!');
+      res.status(400).json({ status: 'failed', err: err.message });
     }
   },
 
@@ -121,13 +123,21 @@ const manageDb = {
           if (voteSum < 1) {
             db.collection('buku').doc(req.body.book.id).delete();
           }
+
+          // remove book entry from user's database
+          removeUserReqList(req.body.uid, req.body.book.id);
           return console.log('entry deleted:', req.body.book.id);
         });
-      removeUserReqList(req.body.uid, req.body.book.id);
-      res.status(200).json('success');
+
+      // remove book entry from user's database
+      await removeUserReqList(req.body.uid, req.body.book.id);
+
+      // send response on success
+      console.log('removing book success');
+      res.status(200).json({ status: 'success' });
     } catch (err) {
-      console.log(err);
-      res.status(400).json('failed');
+      console.log('removing vote failed');
+      res.status(400).json({ status: 'failed', err: err.message });
     }
   },
 

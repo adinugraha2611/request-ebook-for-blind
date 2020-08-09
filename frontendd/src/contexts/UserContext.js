@@ -1,5 +1,6 @@
-import React, { useState, createContext } from 'react';
+import React, { useState, useContext, createContext } from 'react';
 import firebase from '../firebaseConfig';
+import { RequestedListContext } from './RequestedListContext';
 
 const initialState = {
   uid: '',
@@ -14,11 +15,12 @@ export const UserProvider = ({ children }) => {
   const [authCheckDone, setAuthCheckDone] = useState(false);
   const [alertMessage, setAlert] = useState('');
   const [requestList, setRequestList] = useState([]);
+  const { serverUrl } = useContext(RequestedListContext);
 
   // actions
   // register on server side
-  const serverUrl =
-    'https://us-central1-mitranetra-1234.cloudfunctions.net/app';
+  // const serverUrl =
+  // 'https://us-central1-mitranetra-1234.cloudfunctions.net/app';
   const registerOnServer = async (email, password, sendEmailVerification) => {
     try {
       const fetching = await fetch(`${serverUrl}/api/users`, {

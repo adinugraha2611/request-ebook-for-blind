@@ -16,15 +16,6 @@ module.exports = (app) => {
   app.post('/api/add', manageDb.addReq, (req, res) => {
     res.json(res.locals.addBookStatus);
   });
-  /*
-    manageDb
-      .addReq(req.body)
-      .then((result) => {
-        res.json(result);
-      })
-      .catch((er) => console.log(err));
-  });
-  */
 
   // add vote
   app.post('/api/add-vote', manageDb.addVote);

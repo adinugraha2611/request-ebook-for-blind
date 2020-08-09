@@ -11,7 +11,7 @@ import { SignInForm } from './components/SignInForm';
 import { SignOutMessage } from './components/SignOutMessage';
 import { Toast } from './components/Toast';
 import { MyRequestList } from './components/MyRequestList';
-import { Test } from './components/Test';
+import { AdminTools } from './components/AdminTools';
 import { SearchResultContext } from './contexts/SearchResultContext';
 
 export const App = () => {
@@ -61,6 +61,17 @@ export const App = () => {
     requestList,
     authCheckDone,
   } = useContext(UserContext);
+
+  // connect to local server if on localhost (development stage)
+  const { setServerUrl } = useContext(RequestedListContext);
+  useEffect(() => {
+    if (window.location.hostname === 'localhost') {
+      setServerUrl('http://localhost:5000');
+      console.log(
+        'You are on Development stage. Connected to server at localhost:5000'
+      );
+    }
+  }, []);
 
   // get user status and fetch global requested list
   useEffect(() => {
@@ -123,7 +134,9 @@ export const App = () => {
             </Route>
 
             {/* // admin tools page */}
-            <Route path="/admin-tools"></Route>
+            <Route path="/admin-tools">
+              <AdminTools />
+            </Route>
 
             {/* // my request list page */}
             <Route path="/user/requests">
