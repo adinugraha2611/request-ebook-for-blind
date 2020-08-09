@@ -35,9 +35,15 @@ export const ReqButton = ({ book }) => {
       .then((json) => {
         console.log('adding book status:', json);
         // setIsRequested(true);
-        showToast('Buku berhasil ditambahkan ke daftar request', false);
+        showToast('Buku berhasil ditambahkan ke daftar request', true);
       })
-      .catch((err) => console.log('error while adding book:', err));
+      .catch((err) => {
+        console.log('error while adding book:', err);
+        showToast(
+          'Request gagal ditambahkan. Periksa koneksi Anda dan coba lagi',
+          true
+        );
+      });
   };
 
   return (

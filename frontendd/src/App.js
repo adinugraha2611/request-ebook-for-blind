@@ -151,6 +151,7 @@ export const App = () => {
         </main>
       </React.Fragment>
 
+      {/* show action notifications  */}
       <Toast />
     </div>
   );

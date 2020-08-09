@@ -1,14 +1,13 @@
 import React, { useContext } from 'react';
 import { ToastContext } from '../contexts/ToastContext';
-import { LiveMessage } from 'react-aria-live';
 
 export const Toast = () => {
   const { toast } = useContext(ToastContext);
+  // isShown defines wether the toast is visibly shown or not, will be done through css
   const { toastMsg, isShown } = toast;
   return (
     <div>
-      <LiveMessage message={toastMsg} aria-live="assertive" />
-      {isShown ? <span aria-live="assertive">{toastMsg}</span> : null}
+      <span aria-live="assertive">{toastMsg}</span>
     </div>
   );
 };

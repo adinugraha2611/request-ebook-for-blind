@@ -1,16 +1,14 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { UserContext } from '../contexts/UserContext';
 import { RequestedListContext } from '../contexts/RequestedListContext';
+import { ToastContext } from '../contexts/ToastContext';
 
 export const VoteSection = ({ bookInfo }) => {
-  //jangan lupa diganti saat deploy
-  // const serverUrl =
-  // 'https://us-central1-mitranetra-1234.cloudfunctions.net/app';
-
   const { userStatus, requestList, isSignedIn } = useContext(UserContext);
   const { serverUrl } = useContext(RequestedListContext);
   const [voteSum, setVoteSum] = useState(bookInfo.voteSum);
   const [votedOn, setVotedOn] = useState(false);
+  const { showToast } = useContext(ToastContext);
 
   // add/remove vote function
   const vote = async (action) => {
@@ -39,8 +37,13 @@ export const VoteSection = ({ bookInfo }) => {
       if (response.status === 'success') {
         setVoteSum(voteSum - 1);
         setVotedOn(!votedOn);
+        showToast('Request telah dibatalkan', true);
       } else {
         console.log(`removing request failed: ${response.err}`);
+        showToast(
+          'Request gagal dihapus. Periksa Koneksi Anda dan coba lagi',
+          true
+        );
       }
     } else {
       // add 1 vote from server side
@@ -49,8 +52,13 @@ export const VoteSection = ({ bookInfo }) => {
       if (response.status === 'success') {
         setVoteSum(voteSum + 1);
         setVotedOn(!votedOn);
+        showToast('Request telah ditambahkan.', true);
       } else {
         console.log(`Adding request failed: ${response.err}`);
+        showToast(
+          'Request gagal ditambahkan. Periksa koneksi Anda dan coba lagi',
+          true
+        );
       }
     }
   };
