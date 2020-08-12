@@ -29,4 +29,7 @@ module.exports = (app) => {
   app.post('/api/users', manageUser.register, (req, res) => {
     res.json(res.locals.regStatus);
   });
+
+  // get all users
+  app.get('/api/get-users', manageUser.getAllUsers);
 };

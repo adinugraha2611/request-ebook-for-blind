@@ -3,16 +3,17 @@ import { RequestedListContext } from '../contexts/RequestedListContext';
 
 export const ManageUsers = () => {
   const { serverUrl } = useContext(RequestedListContext);
-  const [setIsFetching, isFetching] = useState(false);
-  const [setUsers, users] = useState([]);
+  const [isFetching, setIsFetching] = useState(false);
+  const [users, setUsers] = useState([]);
 
   const getAllUsers = async () => {
     try {
       setIsFetching(true);
-      const response = await fetch(`${serverUrl}/admin-tools/all-users`);
-      const result = response.json();
+      const response = await fetch(`${serverUrl}/api/get-users`);
+      const result = await response.json();
       setUsers(result);
       setIsFetching(false);
+      console.log(result);
     } catch (e) {
       console.log(e);
       setIsFetching(false);

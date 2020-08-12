@@ -7,8 +7,6 @@ const routesConfig = require('./routes-config');
 
 /**
  * setting firebase admin and firestore db
- * don't forget to set env var when on production stage:
- * $env:GOOGLE_APPLICATION_CREDENTIALS="D:\documents\javascript\code testing\my projects\mitranetra-cloud-functions\functions\mitranetra-1234-firebase-adminsdk-izyqz-dc403073b1.json"
  */
 
 // set cors and body parser

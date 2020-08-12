@@ -1,7 +1,8 @@
 /**
  * set firebase admin db and auth
- * don't forget to set env var when on production stage or auth related actions:
+ * don't forget to set google credential for auth related actions:
  */
+
 const admin = require('firebase-admin');
 const firebase = require('../firebaseConfig');
 
@@ -78,10 +79,8 @@ const manageDb = {
       return next();
     } catch (err) {
       res.locals.addBookStatus = new Error(`Adding request Failed: ${err}`);
+      return console.log('Adding book failed', err);
     }
-    /* finally {
-      next();
-    } */
   },
 
   // add vote
@@ -191,34 +190,54 @@ const manageUser = {
     } catch (err) {
       console.log(err);
       res.locals.regStatus = { status: 'failed', err };
+      return console.log('register user failed', err);
     }
-    /* finally {
-      next();
-    } */
   },
   // assign user as admin
   assignUserAsAdmin: (adminAuth, uid) => {
     admin.auth().setCustomUserClaims(uid, { admin: true });
   },
 
-  // show all users
-  showUsers: (nextPageToken) => {
-    // List batch of users, 1000 at a time.
-    auth
-      .listUsers(1000, nextPageToken)
-      .then((listUsersResult) => {
-        listUsersResult.users.forEach((userRecord) => {
-          console.log('user', userRecord.toJSON());
+  showUsers: () => {
+    return 'connected';
+  },
+  // get all users
+  getAllUsers: function (req, res) {
+    let users = [];
+    const listAllUsers = (nextPageToken) => {
+      // List batch of users, 1000 at a time.
+      auth
+        .listUsers(1000, nextPageToken)
+        .then((listUsersResult) => {
+          listUsersResult.users.forEach((userRecord) => {
+            // console.log('user', userRecord.toJSON());
+            users.push(userRecord);
+          });
+          // console.log(users);
+          if (listUsersResult.pageToken) {
+            // List next batch of users.
+            listAllUsers(listUsersResult.pageToken);
+          }
+          return users;
+        })
+        .then((users) => {
+          return res.status(200).json(users);
+        })
+        .catch((err) => {
+          console.log('Error listing users:', err);
+          return res.status(400).json(err);
         });
-        if (listUsersResult.pageToken) {
-          // List next batch of users.
-          showUsers(listUsersResult.pageToken);
-        }
-        return console.log('showing batch of users');
-      })
-      .catch((error) => {
-        console.log('Error listing users:', error);
-      });
+    };
+    listAllUsers();
+    return;
+    /*
+    try {
+      const list = await listAllUsers();
+      await res.status(200).json(list);
+    } catch (err) {
+      res.status(400).json('err');
+    }
+    */
   },
 };
 
