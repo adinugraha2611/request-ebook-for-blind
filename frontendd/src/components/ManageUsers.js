@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { RequestedListContext } from '../contexts/RequestedListContext';
+import UsersTable from './UsersTable';
 
 export const ManageUsers = () => {
   const { serverUrl } = useContext(RequestedListContext);
@@ -11,9 +12,22 @@ export const ManageUsers = () => {
       setIsFetching(true);
       const response = await fetch(`${serverUrl}/api/get-users`);
       const result = await response.json();
-      setUsers(result);
+
+      // deconstructing
+      let data = result.map((user) => {
+        return {
+          uid: user.uid,
+          email: user.email,
+          verified: !user.emailVerified ? 'no' : 'yes',
+          created: user.metadata.creationTime,
+          lastSignIn: user.metadata.lastSignInTime,
+          role:
+            !user.customClaims || !user.customClaims.admin ? 'basic' : 'admin',
+        };
+      });
+
+      setUsers(data);
       setIsFetching(false);
-      console.log(result);
     } catch (e) {
       console.log(e);
       setIsFetching(false);
@@ -27,7 +41,7 @@ export const ManageUsers = () => {
   return (
     <div>
       <h3>Manage Users</h3>
-      <p>{JSON.stringify(users)}</p>
+      <UsersTable users={users} />
     </div>
   );
 };

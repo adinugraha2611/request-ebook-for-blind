@@ -213,7 +213,7 @@ const manageUser = {
             // console.log('user', userRecord.toJSON());
             users.push(userRecord);
           });
-          // console.log(users);
+          // console.log(users[0]);
           if (listUsersResult.pageToken) {
             // List next batch of users.
             listAllUsers(listUsersResult.pageToken);
