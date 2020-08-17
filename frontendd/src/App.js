@@ -1,4 +1,4 @@
-import React, { useReducer, useContext, useEffect } from 'react';
+import React, { useReducer, useEffect, useContext } from 'react';
 import { BookResult } from './components/BookResult';
 import { SearchBar } from './components/SearchBar';
 import { RequestSection } from './components/RequestSection';
@@ -13,6 +13,7 @@ import { Toast } from './components/Toast';
 import { MyRequestList } from './components/MyRequestList';
 import { AdminTools } from './components/AdminTools';
 import { SearchResultContext } from './contexts/SearchResultContext';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 export const App = () => {
   /**
@@ -87,6 +88,7 @@ export const App = () => {
    */
   return (
     <div className="App">
+      <CssBaseline />
       <h1>Request Buku Format EPUB dan Braille</h1>
 
       <React.Fragment>
@@ -135,7 +137,11 @@ export const App = () => {
 
             {/* // admin tools page */}
             <Route path="/admin-tools">
-              <AdminTools />
+              {userStatus.role === 'admin' ? (
+                <AdminTools />
+              ) : (
+                <h2>error 401: unauthorized client!</h2>
+              )}
             </Route>
 
             {/* // my request list page */}
