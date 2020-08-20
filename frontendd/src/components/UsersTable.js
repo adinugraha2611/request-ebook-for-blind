@@ -19,7 +19,7 @@ export default function UsersTable({ users }) {
 
   return (
     <TableContainer component={Paper}>
-      <Table className={classes.table} aria-label="users table">
+      <Table className={classes.table} size="small" aria-label="users table">
         <TableHead>
           <TableRow>
             <TableCell>Email</TableCell>

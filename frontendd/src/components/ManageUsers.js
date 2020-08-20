@@ -29,7 +29,7 @@ export const ManageUsers = () => {
       setUsers(data);
       setIsFetching(false);
     } catch (e) {
-      console.log(e);
+      console.log('failed to load users table', e);
       setIsFetching(false);
     }
   };
